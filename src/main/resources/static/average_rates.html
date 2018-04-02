@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en"  ng-app="rootApp">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link rel="stylesheet" type="text/css" href="css/chart.css">
+    <link rel="stylesheet" type="text/css" href="css/rates.css">
+</head>
+<body >
+    <div>
+	    <div id="header">
+	        <div class="span12">
+	                    <div class="span6">
+	                        <h1 class="muted">NBP</h1>
+	                    </div>
+	                    <div class="span4 offset2" style="margin-top:15px;">
+	                        <button class="btn pull-right" type="button">Sign In</button>
+	                    </div>    
+	        </div>
+	    </div>
+	    
+	    <nav class="navbar navbar-inverse">
+	        <div class="container-fluid">
+	             <ul class="nav navbar-nav">
+	              <li class="active"><a href="http://localhost:8080/my-vocabulary/all_words">Avrage rates</a></li>
+	              <li><a href="http://localhost:8080/my-vocabulary/easy_words">Buy and sell rates</a></li>
+	            </ul>
+	      </div>
+	    </nav>
+    </div>
+
+<div ng-controller="averageRatesCtrl" ng-init="getDataAverageRatesFromRestApi()">
+
+	<div class="words_table">
+		<table class="table">
+		  <thead class="thead-inverse">
+		 	<tr>
+		      <th></th>
+              <th><input ng-model="search.currency"  placeholder="Filter by currency"/></th>
+		      <th><input ng-model="search.code"  placeholder="Filter by code "/></th>
+		      <th><input ng-model="search.mid"   placeholder="Filter by mid "/></th>
+		    </tr>	
+		  </thead>			
+		  <thead class="thead-inverse" style="background: black; color:white">
+		    <tr>
+		      <th>Check</th>
+		      <th>Current</th>
+		      <th>Code</th>
+              <th>Mid</th>
+		    </tr>
+		  </thead>
+		  <tbody>
+		    <tr ng-repeat="averageRate in averageRates | filter:search">
+		   <!--   <th scope="row">{{word.idWord}}</th>-->
+		      <th scope="row">
+                 <input type="checkbox" ng-model="selectedObjs" value="{{averageRate}}"
+                             ng-checked="averageRate.selected"
+                             ng-click="getCheckedObjectData(averageRate)">
+              </th>
+              <td>{{averageRate.currency}}</td>
+		      <td>{{averageRate.code}}</td>
+              <td>{{averageRate.mid}}</td>
+		    </tr>
+		  </tbody>
+		</table>
+	</div>
+
+
+	<div ng-controller="chartCtrl">
+
+		<br>
+		<center>
+			<h1>Set date range "YYYY-MM-DD"</h1>
+			<form class="form-inline" ng-submit="getAverageRatesFromRestApi(codes)">
+				<label class="sr-only" for="inlineFormInput1">Name</label>
+				<input type="text" ng-model="startDate" name="startDate" class="form-control mb-2 mr-sm-2 mb-sm-0" id="inlineFormInput1" placeholder="Start date">
+
+				<label class="sr-only" for="inlineFormInput2">Name</label>
+				<input type="text" ng-model="stopDate" name="stopDate"  class="form-control mb-2 mr-sm-2 mb-sm-0" id="inlineFormInput2" placeholder="Stop date">
+
+				<button type="submit" class="btn btn-primary">Submit</button>
+			</form>
+		</center>
+		<br>
+
+    <center>
+        <div id="resizable2" >
+			<div zingchart id="chart-1" zc-json="myJson" zc-width="100%" zc-height="100%"></div>
+		</div>
+    </center>
+
+    </div>
+</div>
+ 
+    <script type="text/javascript" src="/bower_components/angular/angular.min.js"></script>
+   
+   <!-- <script src = "https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js" ></script>  -->
+    <script src = "https://cdn.zingchart.com/zingchart.min.js" ></script>  
+    <script src = "https://cdn.zingchart.com/angular/zingchart-angularjs.js" ></script>  
+
+     <script type="text/javascript" src="js/chart.js"></script>
+    <script type="text/javascript" src="js/average_rates.js"></script>
+     <script type="text/javascript" src="js/rootApp.js"></script>
+</body>
+</html>
