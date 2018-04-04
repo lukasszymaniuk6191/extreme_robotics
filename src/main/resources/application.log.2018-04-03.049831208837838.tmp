@@ -1,0 +1,29 @@
+"2018-04-04 02:38:58 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=3h59m43ms592µs891ns).
+""2018-04-04 02:38:58 [Thread-2] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'default'
+""2018-04-04 02:38:58 [Thread-2] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown initiated...
+""2018-04-04 02:38:58 [my-scheduled-task-pool-3] ERROR o.s.s.s.TaskUtils$LoggingErrorHandler - Unexpected error occurred in scheduled task.
+"java.lang.InterruptedException: null
+	at java.base/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.reportInterruptAfterWait(AbstractQueuedSynchronizer.java:2037)
+	at java.base/java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(AbstractQueuedSynchronizer.java:2071)
+	at java.base/java.util.concurrent.LinkedBlockingDeque.takeFirst(LinkedBlockingDeque.java:483)
+	at java.base/java.util.concurrent.LinkedBlockingDeque.take(LinkedBlockingDeque.java:671)
+	at java.base/sun.nio.fs.AbstractWatchService.take(AbstractWatchService.java:118)
+	at com.lukas.er.monitoring.service.FileWatcherServiceImpl.detectChangesInFolder(FileWatcherServiceImpl.java:42)
+	at com.lukas.er.monitoring.service.MonitoringServiceImpl.monitoringChangesInFolder(MonitoringServiceImpl.java:36)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:564)
+	at org.springframework.scheduling.support.ScheduledMethodRunnable.run(ScheduledMethodRunnable.java:65)
+	at org.springframework.scheduling.support.DelegatingErrorHandlingRunnable.run(DelegatingErrorHandlingRunnable.java:54)
+	at org.springframework.scheduling.concurrent.ReschedulingRunnable.run(ReschedulingRunnable.java:93)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call$$$capture(Executors.java:514)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java)
+	at java.base/java.util.concurrent.FutureTask.run$$$capture(FutureTask.java:264)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java)
+	at java.base/java.util.concurrent.ScheduledThreadPoolExecutor$ScheduledFutureTask.run(ScheduledThreadPoolExecutor.java:299)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1167)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:641)
+	at java.base/java.lang.Thread.run(Thread.java:844)
+"2018-04-04 02:38:58 [Thread-2] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Shutdown completed.
+"

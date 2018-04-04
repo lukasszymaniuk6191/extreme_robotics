@@ -148,18 +148,21 @@ public class TableDataBaseServiceImpl implements TableDataBaseService{
 
         boolean fileSaved = false;
         LocalDate localDate = LocalDate.now();
-        String date = DateTimeFormatter.ofPattern("yyy-MM-dd").format(localDate);
+        String date = DateTimeFormatter.ofPattern("yyyy-MM-dd").format(localDate);
 
+        System.out.println("oooooooooooooooooooooooo: "+date);
 
         if(fileNameIsCorrect(fileName, "C"))
         {
             BuyAndSellRate buyAndSellRates = jsonObjectReaderService.getBuyAndSellRate(dataOfTheDownloadedFileDto.getDataPropertiesDto().getFilePath(),fileName);
+            System.out.println(buyAndSellRates.toString());
             buyAndSellRates.setTableDate(Date.valueOf(date));
             buyAndSellRatesRepository.save(buyAndSellRates);
             fileSaved = true;
         } else if(fileNameIsCorrect(fileName, "A") || fileNameIsCorrect(fileName, "B"))
         {
             AverageRate averageRate = jsonObjectReaderService.getAverageRate(dataOfTheDownloadedFileDto.getDataPropertiesDto().getFilePath(),fileName);
+            System.out.println(averageRate.toString());
             averageRate.setTableDate(Date.valueOf(date));
             averangeRatesRepository.save(averageRate);
             fileSaved = true;

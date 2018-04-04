@@ -23,8 +23,8 @@
 	    <nav class="navbar navbar-inverse">
 	        <div class="container-fluid">
 	             <ul class="nav navbar-nav">
-	              <li class="active"><a href="http://localhost:8080/my-vocabulary/all_words">Avrage rates</a></li>
-	              <li><a href="http://localhost:8080/my-vocabulary/easy_words">Buy and sell rates</a></li>
+	              <li class="active"><a href="http://localhost:8080/average_rates">Kursy średnie walut obcych</a></li>
+	              <li><a href="http://localhost:8080/traiding_rates">Kurs kupna i sprzedaży walut obcych</a></li>
 	            </ul>
 	      </div>
 	    </nav>
@@ -32,32 +32,35 @@
 
 <div ng-controller="averageRatesCtrl" ng-init="getDataAverageRatesFromRestApi()">
 
+    
 	<div class="words_table">
 		<table class="table">
 		  <thead class="thead-inverse">
 		 	<tr>
 		      <th></th>
-              <th><input ng-model="search.currency"  placeholder="Filter by currency"/></th>
-		      <th><input ng-model="search.code"  placeholder="Filter by code "/></th>
-		      <th><input ng-model="search.mid"   placeholder="Filter by mid "/></th>
+              <th><input ng-model="search.currency"  placeholder="Nazwa - filtruj"/></th>
+		      <th><input ng-model="search.code"  placeholder="Kod - filtruj"/></th>
+		      <th><input ng-model="search.mid"   placeholder="Wartość średnia - filtruj"/></th>
 		    </tr>	
 		  </thead>			
 		  <thead class="thead-inverse" style="background: black; color:white">
 		    <tr>
-		      <th>Check</th>
-		      <th>Current</th>
-		      <th>Code</th>
-              <th>Mid</th>
+		      <th>Wybierz</th>
+		      <th>Nazwa waluty</th>
+		      <th>Kod waluty</th>
+              <th>Kurs średni</th>
 		    </tr>
 		  </thead>
 		  <tbody>
 		    <tr ng-repeat="averageRate in averageRates | filter:search">
-		   <!--   <th scope="row">{{word.idWord}}</th>-->
 		      <th scope="row">
-                 <input type="checkbox" ng-model="selectedObjs" value="{{averageRate}}"
+			<!--	  <input type="checkbox" ng-model="selectedObjs" value="{{averageRate}}"
+						 ng-checked="averageRate.selected"
+						 ng-click="getCheckedObjectData(averageRate)" ng-change="stateChanged(averageRate)">-->
+				  <input type="checkbox" ng-model="selectedObjs" value="{{averageRate}}"
                              ng-checked="averageRate.selected"
                              ng-click="getCheckedObjectData(averageRate)">
-              </th>
+			  </th>
               <td>{{averageRate.currency}}</td>
 		      <td>{{averageRate.code}}</td>
               <td>{{averageRate.mid}}</td>
@@ -71,22 +74,24 @@
 
 		<br>
 		<center>
-			<h1>Set date range "YYYY-MM-DD"</h1>
+			<h1>Ustaw przedział dat "rrrr-mm-dd"</h1>
 			<form class="form-inline" ng-submit="getAverageRatesFromRestApi(codes)">
 				<label class="sr-only" for="inlineFormInput1">Name</label>
-				<input type="text" ng-model="startDate" name="startDate" class="form-control mb-2 mr-sm-2 mb-sm-0" id="inlineFormInput1" placeholder="Start date">
+				<input type="text" ng-model="startDate" name="startDate" class="form-control mb-2 mr-sm-2 mb-sm-0" id="inlineFormInput1" placeholder="Start date" default="2018-03-27">
 
 				<label class="sr-only" for="inlineFormInput2">Name</label>
-				<input type="text" ng-model="stopDate" name="stopDate"  class="form-control mb-2 mr-sm-2 mb-sm-0" id="inlineFormInput2" placeholder="Stop date">
+				<input type="text" ng-model="stopDate" name="stopDate"  class="form-control mb-2 mr-sm-2 mb-sm-0" id="inlineFormInput2" placeholder="Stop date" default="2018-04.02">
 
 				<button type="submit" class="btn btn-primary">Submit</button>
 			</form>
+			{{error2}}
+			<div ng-model="error2"></div>
 		</center>
 		<br>
 
     <center>
         <div id="resizable2" >
-			<div zingchart id="chart-1" zc-json="myJson" zc-width="100%" zc-height="100%"></div>
+			<div zingchart id="chart-1" zc-json="jsonAverageRatesMid" zc-width="100%" ></div>
 		</div>
     </center>
 
@@ -99,7 +104,7 @@
     <script src = "https://cdn.zingchart.com/zingchart.min.js" ></script>  
     <script src = "https://cdn.zingchart.com/angular/zingchart-angularjs.js" ></script>  
 
-     <script type="text/javascript" src="js/chart.js"></script>
+     <script type="text/javascript" src="js/chart2.js"></script>
     <script type="text/javascript" src="js/average_rates.js"></script>
      <script type="text/javascript" src="js/rootApp.js"></script>
 </body>

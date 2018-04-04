@@ -40,7 +40,23 @@ mainPage2.controller('buyAndSellRatesCtrl', ['$scope','$http','BuyAndSellRates',
     
     $scope.getCheckedObjectData = function(buyAndSellRates)
     {
-        BuyAndSellRates.addCode(buyAndSellRates.code);
+        var checked = false;
+
+        var codes = BuyAndSellRates.getCodes();
+        for (var i=0; i < codes.length; i++) {
+            if (codes[i] === buyAndSellRates.code) {
+                checked = true;
+            }
+        }
+
+        if(checked) {
+            var index = BuyAndSellRates.getCodes().indexOf(buyAndSellRates.code);
+            BuyAndSellRates.getCodes().splice(index, 1);
+        }
+        else {
+            BuyAndSellRates.addCode(buyAndSellRates.code);
+        }
+
     }
 
     $scope.codes=BuyAndSellRates.getCodes();
@@ -48,7 +64,7 @@ mainPage2.controller('buyAndSellRatesCtrl', ['$scope','$http','BuyAndSellRates',
     $scope.getDataBuyAndSellRatesFromRestApi = function()
     {
         $http({
-            url : '/api/trading_rates/all',
+            url : '/api/current/trading_rates/all',
             method : 'GET',
             contentType: 'application/json'
 

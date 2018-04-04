@@ -1,76 +1,105 @@
 package com.lukas.er.monitoring.service;
 
 import com.lukas.er.monitoring.dto.RateDataDto;
+import com.lukas.er.monitoring.dto.TradingRateDataDto;
 import org.apache.commons.math3.stat.regression.SimpleRegression;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
 import java.text.ParseException;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 @Service
-public class LinearRegressionServiceImpl {
+public class LinearRegressionServiceImpl implements LinearRegressionService {
 
-    public List<RateDataDto> calculateAverageRatelinearRegression(List<RateDataDto> rateDataDtoList, int numberOfDays) throws ParseException {
-        SimpleRegression simpleRegression = new SimpleRegression();
+    @Value("${extreme.robotics.predictionNumberOfDays}")
+    private int predictionNumberOfDays;
 
 
-        double[][] historicalData = new double[rateDataDtoList.size()][2];
-        int indexOfArray=1;
+    public List<RateDataDto> calculateAverageRatelinearRegression(List<RateDataDto> rateDataDtoList) throws ParseException {
+        SimpleRegression simpleRegressionMid = new SimpleRegression();
 
-        for(int i=0; i<rateDataDtoList.size(); i++)
-        {
-            for(int j=0; j<2; j++)
-            {
-                if(j==0)
-                {
-                    historicalData[i][j]= indexOfArray;
+     RateDataDto rateDataDto = rateDataDtoList.get(rateDataDtoList.size() - 1);
+
+        for (int x = 1; x < (predictionNumberOfDays+1); x++) {
+
+            double[][] historicalData = new double[rateDataDtoList.size()][2];
+            int indexOfArray = 1;
+
+            for (int i = 0; i < rateDataDtoList.size(); i++) {
+                for (int j = 0; j < 2; j++) {
+                    if (j == 0) {
+                        historicalData[i][j] = indexOfArray;
+                    } else {
+                        historicalData[i][j] = Double.parseDouble(rateDataDtoList.get(i).getMid());
+                    }
                 }
-                else {
-                    historicalData[i][j] =Double.parseDouble(rateDataDtoList.get(i).getMid()); // ThreadLocalRandom.current().nextDouble(3.3, 3.7);
-                }
-
+                indexOfArray++;
             }
-            indexOfArray++;
 
+            simpleRegressionMid.addData(historicalData);
+            rateDataDtoList.add(new RateDataDto(Date.valueOf(addNumberOfDaysToCurrentDate(x))
+                    , rateDataDto.getCurrency(),
+                    rateDataDto.getCode(), String.valueOf(simpleRegressionMid.predict(x))));
         }
 
-
-
-        simpleRegression.addData(historicalData);
-
-        // querying for model parameters
-        System.out.println("slope = " + simpleRegression.getSlope());
-        System.out.println("intercept = " + simpleRegression.getIntercept());
-
-        // trying to run model for unknown data
-        System.out.println("prediction for 1.5 = " + simpleRegression.predict(1.5));
-
-        RateDataDto rateDataDto = rateDataDtoList.get(rateDataDtoList.size()-1);
-        System.out.println(rateDataDto.toString());
-
-        Date input = new Date();
-        LocalDate date = input.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-
-        //rateDataDtoList.clear();
-
-        for(int a=2;a<10; a++)
-        {
-            Date date2 = Date.from(date.plusDays(a).atStartOfDay(ZoneId.systemDefault()).toInstant());
-            rateDataDtoList.add(new RateDataDto(date2
-                    ,rateDataDto.getCurrency(),
-                    rateDataDto.getCode(),String.valueOf(simpleRegression.predict(a))));
-        }
-
-
-
-
-
-
-        return null;
+        return rateDataDtoList;
     }
 
+    public List<TradingRateDataDto> calculateTradingRateLinearRegression(List<TradingRateDataDto> tradingRateDataDtoList) throws ParseException {
+        SimpleRegression simpleRegressionBid = new SimpleRegression();
+        SimpleRegression simpleRegressionAsk = new SimpleRegression();
+
+        TradingRateDataDto tradingRateDataDto = tradingRateDataDtoList.get(tradingRateDataDtoList.size() - 1);
+
+        for (int x = 1; x < (predictionNumberOfDays+1); x++) {
+
+            double[][] historicalDataBid = new double[tradingRateDataDtoList.size()][2];
+            double[][] historicalDataAsk = new double[tradingRateDataDtoList.size()][2];
+            int indexOfArray = 1;
+
+            for (int i = 0; i < tradingRateDataDtoList.size(); i++) {
+                for (int j = 0; j < 2; j++) {
+                    if (j == 0) {
+                        historicalDataBid[i][j] = indexOfArray;
+                        historicalDataAsk[i][j] = indexOfArray;
+                    } else {
+                        historicalDataBid[i][j] = Double.parseDouble(tradingRateDataDtoList.get(i).getBid());
+                        historicalDataAsk[i][j] = Double.parseDouble(tradingRateDataDtoList.get(i).getAsk());
+
+                    }
+                }
+                indexOfArray++;
+            }
+
+            simpleRegressionBid.addData(historicalDataBid);
+            simpleRegressionAsk.addData(historicalDataAsk);
+
+            tradingRateDataDtoList.add(new TradingRateDataDto(Date.valueOf(addNumberOfDaysToCurrentDate(x))
+                    ,tradingRateDataDto.getCurrency(), tradingRateDataDto.getCode(),
+                    String.valueOf(simpleRegressionBid.predict(x)),String.valueOf(simpleRegressionAsk.predict(x))));
+        }
+
+        return tradingRateDataDtoList;
+    }
+
+
+    public String addNumberOfDaysToCurrentDate(int i) throws ParseException {
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, i);
+        SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
+
+
+
+        return format1.format(cal.getTime());
+    }
+
+
+    public void setPredictionNumberOfDays(int predictionNumberOfDays) {
+        this.predictionNumberOfDays = predictionNumberOfDays;
+    }
 
 }

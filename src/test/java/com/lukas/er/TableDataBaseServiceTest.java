@@ -1,7 +1,10 @@
 package com.lukas.er;
 
 
+import com.lukas.er.monitoring.dto.DataOfTheDownloadedFilePropertiesDto;
 import com.lukas.er.monitoring.dto.FileWatcherDataDto;
+import com.lukas.er.monitoring.entity.AverageRate;
+import com.lukas.er.monitoring.entity.BuyAndSellRate;
 import com.lukas.er.monitoring.repository.AverangeRatesRepository;
 import com.lukas.er.monitoring.repository.BuyAndSellRateRepository;
 import com.lukas.er.monitoring.service.JsonObjectReaderService;
@@ -22,6 +25,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -36,6 +40,8 @@ public class TableDataBaseServiceTest {
     private JsonObjectReaderService jsonObjectReaderServiceMock;
     @Autowired
     private TableDataBaseService tableDataBaseService;
+    @Autowired
+    DataOfTheDownloadedFilePropertiesDto dataOfTheDownloadedFilePropertiesDto;
 
 
 
@@ -94,6 +100,12 @@ public class TableDataBaseServiceTest {
         when(buyAndSellRateRepositoryMock.save(any(BuyAndSellRate.class)))
                 .thenReturn(persistedBuyAndSellRate);*/
 
+        when(jsonObjectReaderServiceMock.getAverageRate(dataOfTheDownloadedFilePropertiesDto.getFilePath(),"A_2018-03-28.json"))
+                .thenReturn(new AverageRate());
+        when(jsonObjectReaderServiceMock.getAverageRate(dataOfTheDownloadedFilePropertiesDto.getFilePath(),"B_2018-03-28.json"))
+                .thenReturn(new AverageRate());
+        when(jsonObjectReaderServiceMock.getBuyAndSellRate(dataOfTheDownloadedFilePropertiesDto.getFilePath(),"C_2018-03-28.json"))
+                .thenReturn(new BuyAndSellRate());
 
         List<FileWatcherDataDto> inputFileWatcherDataDtoList = new ArrayList<>();
         inputFileWatcherDataDtoList.add(
@@ -105,6 +117,19 @@ public class TableDataBaseServiceTest {
         List<FileWatcherDataDto> outputFileWatcherDataDtoList
                 = tableDataBaseService.updateDataInDb(inputFileWatcherDataDtoList);
 
+/*
+
+        List<FileWatcherDataDto> inputFileWatcherDataDtoList = new ArrayList<>();
+        inputFileWatcherDataDtoList.add(
+                new FileWatcherDataDto("A_2018-03-28.json","ENTRY_CREATE"));
+        inputFileWatcherDataDtoList.add(
+                new FileWatcherDataDto("B_2018-03-28.json","ENTRY_CREATE"));
+        inputFileWatcherDataDtoList.add(
+                new FileWatcherDataDto("C_2018-03-28.json","ENTRY_CREATE"));
+        List<FileWatcherDataDto> outputFileWatcherDataDtoList = new ArrayList<>();
+        outputFileWatcherDataDtoList = tableDataBaseService.updateDataInDb(inputFileWatcherDataDtoList);
+*/
+
         assertEquals(3,outputFileWatcherDataDtoList.size());
         assertTrue(outputFileWatcherDataDtoList.contains(
                 new FileWatcherDataDto("A_2018-03-28.json","ENTRY_CREATED")));
@@ -113,6 +138,9 @@ public class TableDataBaseServiceTest {
         assertTrue(outputFileWatcherDataDtoList.contains(
                 new FileWatcherDataDto("C_2018-03-28.json","ENTRY_CREATED")));
 
+
+        when(jsonObjectReaderServiceMock.getBuyAndSellRate(dataOfTheDownloadedFilePropertiesDto.getFilePath(),"C_2018-03-30.json"))
+                .thenReturn(new BuyAndSellRate());
 
 
         inputFileWatcherDataDtoList.add(

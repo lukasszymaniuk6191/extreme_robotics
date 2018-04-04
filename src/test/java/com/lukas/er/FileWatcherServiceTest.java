@@ -1,7 +1,9 @@
 package com.lukas.er;
 
+import com.lukas.er.monitoring.dto.DataOfTheDownloadedFileDto;
 import com.lukas.er.monitoring.dto.FileWatcherDataDto;
 import com.lukas.er.monitoring.service.FileWatcherService;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -15,6 +17,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.WatchService;
+import java.util.ArrayList;
 import java.util.List;
 
 import static java.nio.file.StandardWatchEventKinds.*;
@@ -30,18 +33,26 @@ public class FileWatcherServiceTest {
     @Autowired
     private FileWatcherService fileWatcherService;
 
-   @Rule
-   public TemporaryFolder folder = new TemporaryFolder();
+    @Autowired
+    private DataOfTheDownloadedFileDto dataOfTheDownloadedFileDto;
 
+    @Rule
+    public TemporaryFolder folder = new TemporaryFolder();
+
+    @Before
+    public void init()
+    {
+        dataOfTheDownloadedFileDto.getDataPropertiesDto().setFilePath(folder.getRoot().getPath());
+    }
 
     @Test
     public void fileWatcherServiceCorrectTest() throws IOException, InterruptedException {
 
 
 
-        List<FileWatcherDataDto> fileWatcherDataDtoList;
+        List<FileWatcherDataDto> fileWatcherDataDtoList = new ArrayList<>();
         WatchService watcher = FileSystems.getDefault().newWatchService();
-        Path path = Paths.get(folder.getRoot().getPath().toString());
+        Path path = Paths.get(folder.getRoot().getPath());
         path.register(watcher, ENTRY_CREATE, ENTRY_MODIFY, ENTRY_DELETE);
         fileWatcherService.setFileWatcherParams(watcher, path);
 

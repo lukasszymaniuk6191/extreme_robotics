@@ -23,8 +23,8 @@
 	    <nav class="navbar navbar-inverse">
 	        <div class="container-fluid">
 	             <ul class="nav navbar-nav">
-	              <li><a href="http://localhost:8080/my-vocabulary/all_words">Avrage rates</a></li>
-	              <li class="active"><a href="http://localhost:8080/my-vocabulary/easy_words">Buy and sell rates</a></li>
+	              <li><a href="http://localhost:8080/average_rates">Kursy średnie walut obcych</a></li>
+	              <li class="active"><a href="http://localhost:8080/traiding_rates">Kurs kupna i sprzedaży walut obcych</a></li>
 	            </ul>
 	      </div>
 	    </nav>
@@ -38,19 +38,19 @@
 		  <thead class="thead-inverse">
 		 	<tr>
 		      <th></th>
-              <th><input ng-model="search.currency"  placeholder="Filter by currency"/></th>
-		      <th><input ng-model="search.code"  placeholder="Filter by code "/></th>
-		      <th><input ng-model="search.bid"   placeholder="Filter by bid "/></th>
-               <th><input ng-model="search.ask"   placeholder="Filter by ask "/></th>
+              <th><input ng-model="search.currency"  placeholder="Nazwa - filtruj"/></th>
+		      <th><input ng-model="search.code"  placeholder="Kod - filtruj "/></th>
+		      <th><input ng-model="search.bid"   placeholder="Kurs kupna - filtruj "/></th>
+               <th><input ng-model="search.ask"   placeholder="Kurs sprzedaży - filtruj"/></th>
 		    </tr>	
 		  </thead>			
 		  <thead class="thead-inverse" style="background: black; color:white">
 		    <tr>
-		      <th>Check</th>
-		      <th>Current</th>
-		      <th>Code</th>
-              <th>Bid</th>
-              <th>Ask</th>
+		      <th>Wybierz</th>
+		      <th>Nazwa waluty</th>
+		      <th>Kurs waluty</th>
+              <th>Kurs kupna</th>
+              <th>Kurs sprzedaży</th>
 		    </tr>
 		  </thead>
 		  <tbody>
@@ -73,13 +73,13 @@
 
       <br>
         <center>
-            <h1>Set date range - "YYYY-MM-DD"</h1>
+            <h1>Ustaw przedział dat "rrrr-mm-dd"</h1>
             <form class="form-inline" ng-submit="getTradingRatesFromRestApi(codes)">
               <label class="sr-only" for="inlineFormInput">Name</label>
               <input type="text" ng-model="startDate" name="startDate" class="form-control mb-2 mr-sm-2 mb-sm-0" id="inlineFormInput" placeholder="Start date">
 
               <label class="sr-only" for="inlineFormInput">Name</label>
-              <input type="text" ng-model="stopDate" name="stopDate"  class="form-control mb-2 mr-sm-2 mb-sm-0" id="inlineFormInput" placeholder="Stop date">
+              <input type="text" ng-model="stopDate" name="stopDate"  class="form-control mb-2 mr-sm-2 mb-sm-0" id="inlineFormInput2" placeholder="Stop date">
 
               <button type="submit" class="btn btn-primary">Submit</button>
             </form>
@@ -87,11 +87,14 @@
             <br>
         
     <center>
-        <div  id="resizable">
-             <div   zingchart id="chart-1" zc-json="myJson" zc-width="100%" zc-height="100%"></div>
-        
-        
+        <div  id="resizable2">
+            <div   zingchart id="chart-1" zc-json="jsonTradingRateBids" zc-width="100%" zc-height="100%"></div>
+            <br>
+            <div   zingchart id="chart-2" zc-json="jsonTradingRateAsks" zc-width="100%" zc-height="100%"></div>
         </div>
+
+
+
     </center>
 
         </div>
@@ -112,7 +115,7 @@
     <script src = "https://cdn.zingchart.com/zingchart.min.js" ></script>  
     <script src = "https://cdn.zingchart.com/angular/zingchart-angularjs.js" ></script>  
      <script type="text/javascript" src="js/buy_and_sell_rates.js"></script> 
-    <script type="text/javascript" src="js/chart.js"></script>
+    <script type="text/javascript" src="js/chart2.js"></script>
    
      <script type="text/javascript" src="js/rootApp2.js"></script>
 </body>
