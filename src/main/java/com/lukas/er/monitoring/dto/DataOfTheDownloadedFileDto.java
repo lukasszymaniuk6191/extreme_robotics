@@ -48,6 +48,32 @@ public class DataOfTheDownloadedFileDto {
         return dataOfTheDownloadedFileDtoList;
     }
 
+
+    public List<DataOfTheDownloadedFileDto> getDataDownloadedFilesFromTheLastMonth()
+    {
+        List<DataOfTheDownloadedFileDto> dataOfTheDownloadedFileDtoList = new ArrayList<>();
+        String[] tableNames = dataPropertiesDto.getTableNames();
+
+        LocalDate localDate = LocalDate.now();
+        int lastNumberOfDays = 10;
+        for(int i=lastNumberOfDays; i>=0; i--)
+        {
+            String startDate = DateTimeFormatter.ofPattern("yyy-MM-dd")
+                    .format(localDate.minusDays(i));
+            for(int j=0; j<tableNames.length; j++)
+            {
+                url = this.dataPropertiesDto.getTableBaseUrl()+
+                        tableNames[j]+"/"+startDate;
+                file = dataPropertiesDto.getFilePath()+tableNames[j]+
+                        "_"+startDate+dataPropertiesDto.getFileType();
+                dataOfTheDownloadedFileDtoList.add(
+                        new DataOfTheDownloadedFileDto(file,url));
+            }
+        }
+
+        return dataOfTheDownloadedFileDtoList;
+    }
+
     public String getFile() {
         return file;
     }

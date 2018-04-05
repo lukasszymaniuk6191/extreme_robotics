@@ -52,7 +52,6 @@ public class RestApiControllerTest {
         restApiController.setAverangeRatesRepository(averangeRatesRepositoryMock);
         restApiController.setBuyAndSellRateRepository(buyAndSellRateRepositoryMock);
         restApiController.setLinearRegressionService(linearRegressionServiceMock);
-
     }
 
     @Test

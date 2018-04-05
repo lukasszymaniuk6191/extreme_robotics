@@ -13,6 +13,7 @@ import java.util.List;
 @Component
 public class MonitoringServiceImpl implements MonitoringService{
 
+
     private FileWatcherService fileWatcherService;
     private FileDownloaderService fileDownloaderService;
     private TableDataBaseService fileDbWriterService;
@@ -22,22 +23,23 @@ public class MonitoringServiceImpl implements MonitoringService{
     @Autowired
     public MonitoringServiceImpl(FileWatcherService fileWatcherService,
                                  FileDownloaderService fileDownloaderService,
-                                 TableDataBaseService fileDbWriterService) throws IOException {
+                                 TableDataBaseService fileDbWriterService) throws IOException, InterruptedException {
 
         this.fileWatcherService = fileWatcherService;
         this.fileDownloaderService = fileDownloaderService;
         this.fileDbWriterService = fileDbWriterService;
 
+
     }
 
-    @Scheduled(cron = "*/3 * * * * *")
+    @Scheduled(cron = "*/5 * * * * *")
     public void monitoringChangesInFolder() throws InterruptedException, IOException, ParseException {
 
         List<FileWatcherDataDto> fileWatcherDataDtoList = fileWatcherService.detectChangesInFolder();
         fileDbWriterService.updateDataInDb(fileWatcherDataDtoList);
     }
 
-    @Scheduled(cron = "*/10 * * * * *")
+    @Scheduled(cron = "*/3600 * * * * *")
     public void downloadingTheFileFromUrl() throws IOException {
 
         fileDownloaderService.download();

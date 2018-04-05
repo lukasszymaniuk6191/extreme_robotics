@@ -48,7 +48,6 @@ public class TableDataBaseServiceTest {
     @Before
     public void setUp()
     {
-        //averangeRatesRepositoryMock = mock(AverangeRatesRepository.class);
         tableDataBaseService.setBuyAndSellRatesRepository(buyAndSellRateRepositoryMock);
         tableDataBaseService.setAverangeRatesRepository(averangeRatesRepositoryMock);
         tableDataBaseService.setJsonObjectReaderService(jsonObjectReaderServiceMock);
@@ -56,49 +55,6 @@ public class TableDataBaseServiceTest {
 
     @Test
     public void tableDataBaseServiceCorrectTest() throws IOException, ParseException {
-     /*   Rates createdRate = Rates.builder()
-                .currency("afgani (Afganistan)").code("AFN").mid("0.048817").build();
-        List<Rates> createdRatesList = new ArrayList<>();
-        createdRatesList.add(createdRate);
-
-        AverageRate crestedAverageRate = AverageRate.builder()
-                .table("B").no("013/B/NBP/2018").effectiveDate(Date.valueOf("2018-03-28"))
-                .rates(createdRatesList).build();
-
-        TradingRates createdTradingRate = TradingRates.builder()
-                .currency("dolar amerykański").code("USD").bid("3.3670")
-                .ask("3.4350").build();
-        List<TradingRates> createdTradingRateList = new ArrayList<>();
-        createdTradingRateList.add(createdTradingRate);
-
-        BuyAndSellRate createdBuyAndSellRate = BuyAndSellRate.builder()
-                .table("C").no("062/C/NBP/2018").tradingDate(Date.valueOf("2018-03-27"))
-                .effectiveDate(Date.valueOf("2018-03-28")).rates(createdTradingRateList).build();
-
-
-        Rates persistedRate = Rates.builder()
-                .id(1L).currency("afgani (Afganistan)").code("AFN").mid("0.048817").build();
-        List<Rates> persistedRatesList = new ArrayList<>();
-        createdRatesList.add(persistedRate);
-
-        AverageRate persistedAverageRate = AverageRate.builder()
-                .id(1L).table("B").no("013/B/NBP/2018").effectiveDate(Date.valueOf("2018-03-28"))
-                .rates(persistedRatesList).build();
-
-        TradingRates persistedTradingRate = TradingRates.builder()
-                .id(1L).currency("dolar amerykański").code("USD")
-                .bid("3.3670").ask("3.4350").build();
-        List<TradingRates> persistedTradingRateList = new ArrayList<>();
-        createdTradingRateList.add(persistedTradingRate);
-
-        BuyAndSellRate persistedBuyAndSellRate = BuyAndSellRate.builder()
-                .id(1L).table("C").no("062/C/NBP/2018").tradingDate(Date.valueOf("2018-03-27"))
-                .effectiveDate(Date.valueOf("2018-03-28")).rates(persistedTradingRateList).build();
-
-        when(averangeRatesRepositoryMock.save(any(AverageRate.class)))
-                .thenReturn(persistedAverageRate);
-        when(buyAndSellRateRepositoryMock.save(any(BuyAndSellRate.class)))
-                .thenReturn(persistedBuyAndSellRate);*/
 
         when(jsonObjectReaderServiceMock.getAverageRate(dataOfTheDownloadedFilePropertiesDto.getFilePath(),"A_2018-03-28.json"))
                 .thenReturn(new AverageRate());
@@ -117,18 +73,6 @@ public class TableDataBaseServiceTest {
         List<FileWatcherDataDto> outputFileWatcherDataDtoList
                 = tableDataBaseService.updateDataInDb(inputFileWatcherDataDtoList);
 
-/*
-
-        List<FileWatcherDataDto> inputFileWatcherDataDtoList = new ArrayList<>();
-        inputFileWatcherDataDtoList.add(
-                new FileWatcherDataDto("A_2018-03-28.json","ENTRY_CREATE"));
-        inputFileWatcherDataDtoList.add(
-                new FileWatcherDataDto("B_2018-03-28.json","ENTRY_CREATE"));
-        inputFileWatcherDataDtoList.add(
-                new FileWatcherDataDto("C_2018-03-28.json","ENTRY_CREATE"));
-        List<FileWatcherDataDto> outputFileWatcherDataDtoList = new ArrayList<>();
-        outputFileWatcherDataDtoList = tableDataBaseService.updateDataInDb(inputFileWatcherDataDtoList);
-*/
 
         assertEquals(3,outputFileWatcherDataDtoList.size());
         assertTrue(outputFileWatcherDataDtoList.contains(

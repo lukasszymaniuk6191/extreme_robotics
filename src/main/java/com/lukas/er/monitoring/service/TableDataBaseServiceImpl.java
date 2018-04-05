@@ -135,13 +135,10 @@ public class TableDataBaseServiceImpl implements TableDataBaseService{
             fileTypeIsCorrect = true;
         }
 
-        if((tableNameIsCorrect==true) && (dateIsCorrect==true) && (fileTypeIsCorrect==true))
-        {
-            return true;
-        }
-        else{
-            return false;
-        }
+
+        return ((tableNameIsCorrect==true) && (dateIsCorrect==true) && (fileTypeIsCorrect==true));
+
+
     }
 
     public boolean saveTable(String fileName) throws IOException, ParseException {
@@ -150,19 +147,16 @@ public class TableDataBaseServiceImpl implements TableDataBaseService{
         LocalDate localDate = LocalDate.now();
         String date = DateTimeFormatter.ofPattern("yyyy-MM-dd").format(localDate);
 
-        System.out.println("oooooooooooooooooooooooo: "+date);
 
         if(fileNameIsCorrect(fileName, "C"))
         {
             BuyAndSellRate buyAndSellRates = jsonObjectReaderService.getBuyAndSellRate(dataOfTheDownloadedFileDto.getDataPropertiesDto().getFilePath(),fileName);
-            System.out.println(buyAndSellRates.toString());
             buyAndSellRates.setTableDate(Date.valueOf(date));
             buyAndSellRatesRepository.save(buyAndSellRates);
             fileSaved = true;
         } else if(fileNameIsCorrect(fileName, "A") || fileNameIsCorrect(fileName, "B"))
         {
             AverageRate averageRate = jsonObjectReaderService.getAverageRate(dataOfTheDownloadedFileDto.getDataPropertiesDto().getFilePath(),fileName);
-            System.out.println(averageRate.toString());
             averageRate.setTableDate(Date.valueOf(date));
             averangeRatesRepository.save(averageRate);
             fileSaved = true;
@@ -175,32 +169,13 @@ public class TableDataBaseServiceImpl implements TableDataBaseService{
     }
 
 
-    public JsonObjectReaderService getJsonObjectReaderService() {
-        return jsonObjectReaderService;
-    }
 
     public void setJsonObjectReaderService(JsonObjectReaderService jsonObjectReaderService) {
         this.jsonObjectReaderService = jsonObjectReaderService;
     }
 
-    public DataOfTheDownloadedFileDto getDataOfTheDownloadedFileDto() {
-        return dataOfTheDownloadedFileDto;
-    }
-
-    public void setDataOfTheDownloadedFileDto(DataOfTheDownloadedFileDto dataOfTheDownloadedFileDto) {
-        this.dataOfTheDownloadedFileDto = dataOfTheDownloadedFileDto;
-    }
-
-    public AverangeRatesRepository getAverangeRatesRepository() {
-        return averangeRatesRepository;
-    }
-
     public void setAverangeRatesRepository(AverangeRatesRepository averangeRatesRepository) {
         this.averangeRatesRepository = averangeRatesRepository;
-    }
-
-    public BuyAndSellRateRepository getBuyAndSellRatesRepository() {
-        return buyAndSellRatesRepository;
     }
 
     public void setBuyAndSellRatesRepository(BuyAndSellRateRepository buyAndSellRatesRepository) {

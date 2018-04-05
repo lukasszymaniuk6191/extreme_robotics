@@ -59,13 +59,6 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<ExceptionDto>(exceptionDto, HttpStatus.BAD_REQUEST);
     }
 
-   /* @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ExceptionDto> exceptionHandler2(HttpServletRequest req, Exception e)
-    {
-        ExceptionDto exceptionDto  = new ExceptionDto(HttpStatus.NOT_FOUND.toString(),  e.getClass().getName(), e.getMessage());
-        return new ResponseEntity<ExceptionDto>(exceptionDto, HttpStatus.NOT_FOUND);
-    }*/
 
 
 }
